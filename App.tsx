@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 
-type Props = {};
 interface IToDo {
   text: string;
   completed: boolean;
@@ -12,6 +11,25 @@ export default function App() {
   const [toDoList, setToDos] = useState<IToDo[]>([]);
   const [error, showError] = useState<Boolean>(false);
 
+  const handleSubmit = () => {
+    if (value.trim())
+      setToDos([...toDoList, { text: value, completed: false }]);
+    else showError(true);
+    setValue("");
+  };
+
+  const removeItem = (index: number) => {
+    const newToDoList = [...toDoList];
+    newToDoList.splice(index, 1);
+    setToDos(newToDoList);
+  };
+
+  const toggleComplete = (index: number) => {
+    const newToDoList = [...toDoList];
+    newToDoList[index].completed = !newToDoList[index].completed;
+    setToDos(newToDoList);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todo List</Text>
@@ -19,10 +37,13 @@ export default function App() {
         <TextInput
           placeholder="Enter your todo task..."
           value={value}
-          onChangeText={e => {}}
+          onChangeText={e => {
+            setValue(e);
+            showError(false);
+          }}
           style={styles.inputBox}
         />
-        <Button title="Add Task" onPress={() => {}} />
+        <Button title="Add Task" onPress={handleSubmit} />
       </View>
       {error && (
         <Text style={styles.error}>Error: Input field is empty...</Text>
@@ -41,9 +62,15 @@ export default function App() {
           </Text>
           <Button
             title={toDo.completed ? "Completed" : "Complete"}
-            onPress={() => {}}
+            onPress={() => toggleComplete(index)}
           />
-          <Button title="X" onPress={() => {}} color="crimson" />
+          <Button
+            title="X"
+            onPress={() => {
+              removeItem(index);
+            }}
+            color="crimson"
+          />
         </View>
       ))}
     </View>
