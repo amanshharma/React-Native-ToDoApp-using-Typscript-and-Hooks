@@ -11,20 +11,20 @@ export default function App() {
   const [toDoList, setToDos] = useState<IToDo[]>([]);
   const [error, showError] = useState<Boolean>(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     if (value.trim())
       setToDos([...toDoList, { text: value, completed: false }]);
     else showError(true);
     setValue("");
   };
 
-  const removeItem = (index: number) => {
+  const removeItem = (index: number): void => {
     const newToDoList = [...toDoList];
     newToDoList.splice(index, 1);
     setToDos(newToDoList);
   };
 
-  const toggleComplete = (index: number) => {
+  const toggleComplete = (index: number): void => {
     const newToDoList = [...toDoList];
     newToDoList[index].completed = !newToDoList[index].completed;
     setToDos(newToDoList);
